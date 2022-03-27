@@ -5,8 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
@@ -17,6 +15,7 @@ import MainListItems from "components/layout/MainListItems";
 import SecondaryListItems from "components/layout/SecondaryListItems";
 import { storeContext } from "components/provider/Provider";
 import MobileDrawer from "components/layout/MobileDrawer";
+import logo from "images/logo.svg";
 
 const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
@@ -42,7 +41,7 @@ const Sidebar = () => {
       >
         <Box width="50%">
           <Link to="/">
-            logo
+            <img src={logo} alt="Sidebar icon logo" width="100" />
           </Link>
         </Box>
         <Box width="50%" textAlign="right">
@@ -89,11 +88,6 @@ const Sidebar = () => {
           >
             {state.layout.pageTitle}
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
         </Toolbar>
       </AppBar>
       {isPhone ? (

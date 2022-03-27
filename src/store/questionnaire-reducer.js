@@ -1,7 +1,10 @@
 const initialQuestionnaireState = {
   openFirstResults: false,
+  openSecondResults: false,
   recognized: false,
+  ranking: null,
   openFirstQuestionnaire: false,
+  openSecondQuestionnaire: false,
 };
 
 const questionnaireActions = {

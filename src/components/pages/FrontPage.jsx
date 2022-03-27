@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
-// import Questionnaire from "components/questionnaires/Questionnaire";
 import {
   Chip,
   Dialog,
@@ -102,12 +101,26 @@ const FrontPage = () => {
         {state.questionnaire.recognized ? (
           <DialogActions>
             <Button onClick={handleCloseFirstResults}>Discard</Button>
-            <Button onClick={handleCloseFirstResults}>Continue</Button>
+            <Button
+              onClick={() => {
+                handleCloseFirstResults();
+                history.push("/register");
+              }}
+            >
+              Continue
+            </Button>
           </DialogActions>
         ) : (
           <DialogActions>
             <Button onClick={handleCloseFirstResults}>Close</Button>
-            <Button onClick={handleCloseFirstResults}>More Information</Button>
+            <Button
+              onClick={() => {
+                handleCloseFirstResults();
+                history.push("/more-info");
+              }}
+            >
+              More Information
+            </Button>
           </DialogActions>
         )}
       </Dialog>
@@ -142,12 +155,12 @@ const FrontPage = () => {
             </Link>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8} mb={20}>
+        <Grid item xs={12} md={12} lg={8}>
           <Typography
             component="h2"
             variant="h2"
             maxWidth="50%"
-            fontWeight={700}
+            fontWeight={600}
             marginBottom={10}
             margin="auto"
             textAlign="center"
@@ -156,7 +169,11 @@ const FrontPage = () => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid container p={3} sx={{ width: "100%", backgroundColor: "#F0FDFD" }}>
+      <Grid
+        container
+        p={3}
+        sx={{ width: "100%", backgroundColor: theme.palette.primary.light }}
+      >
         <Typography component="p" variant="h5">
           We are the{" "}
           <span style={{ color: theme.palette.primary.main, fontWeight: 700 }}>
@@ -173,6 +190,11 @@ const FrontPage = () => {
             padding: "25px",
             borderRadius: "50px",
             marginTop: 10,
+            whiteSpace: "normal",
+            "& .MuiChip-label": {
+              whiteSpace: "normal",
+            },
+            height: "100%",
           }}
           label="Check the following illustrations. Would you say that most of them reflect your current state?"
         />

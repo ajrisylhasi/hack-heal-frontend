@@ -6,6 +6,8 @@ const theme = createTheme({
     mode: "light",
     primary: {
       main: "#4120A9",
+      light: "#F0FDFD",
+      heading: "#9FA8EB",
     },
     secondary: {
       main: "#9FA8EB",
@@ -13,6 +15,7 @@ const theme = createTheme({
   },
   typography: {
     color: "#1e1e1f",
+    fontFamily: "Jost",
   },
   breakpoints: {
     values: {

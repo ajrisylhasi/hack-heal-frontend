@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from "axios";
-import {Link as RouterLink, useHistory} from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,13 +10,12 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {useContext} from "react";
-import {storeContext} from "components/provider/Provider";
-import {layoutActions} from "store/layouts-reducer";
+import { useContext } from "react";
+import { storeContext } from "components/provider/Provider";
+import { layoutActions } from "store/layouts-reducer";
 
 const { REACT_APP_SITE_URL } = process.env;
 const Register = () => {
-
   const { dispatch } = useContext(storeContext);
   const history = useHistory();
 
@@ -70,6 +69,10 @@ const Register = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
+        </Typography>
+        <Typography component="p" variant="p" mt={2}>
+          We offer a very simple Sign Up process and every bit of information
+          shared with this platform is completely Anonymous.
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>

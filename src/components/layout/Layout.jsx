@@ -11,6 +11,7 @@ import Register from "../register/Register";
 import { storeContext } from "../provider/Provider";
 import { authActions } from "../../store/auth-reducer";
 import Sidebar from "./Sidebar";
+import { questionnaireActions } from "../../store/questionnaire-reducer";
 
 const { REACT_APP_SITE_URL } = process.env;
 
@@ -21,12 +22,20 @@ const Layout = () => {
 
   const getData = () => {
     axios.get(`${REACT_APP_SITE_URL}/api/me/`).then((res) => {
-      dispatch({
-        type: authActions.AUTH_SET_ALL,
-        payload: {
-          user: res.data,
-        },
-      });
+      if (res.status === 200) {
+        dispatch({
+          type: authActions.AUTH_SET_ALL,
+          payload: {
+            user: res.data,
+          },
+        });
+        dispatch({
+          type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+          payload: {
+            openSecondQuestionnaire: !res.data.tested,
+          },
+        });
+      }
     });
     dispatch({
       type: authActions.AUTH_SET_ALL,

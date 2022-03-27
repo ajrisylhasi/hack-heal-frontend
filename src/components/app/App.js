@@ -13,6 +13,7 @@ import Layout from "components/layout/Layout";
 import generalTheme from "theme";
 import SignalHandler from "components/layout/SignalHandler";
 import FrontPage from "components/pages/FrontPage";
+import MoreInfo from "components/pages/MoreInfo";
 
 const App = () => (
   <Provider>
@@ -23,6 +24,9 @@ const App = () => (
           <Switch>
             <Route path={["/home"]}>
               <FrontPage />
+            </Route>
+            <Route path={["/more-info"]}>
+              <MoreInfo />
             </Route>
             <Route path={["/login"]}>
               <Login />

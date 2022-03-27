@@ -5,16 +5,19 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import PropTypes from "prop-types";
 import Loader from "shared/components/Loader";
+import { Typography } from "@material-ui/core";
+import { useCookies } from "react-cookie";
 import Question from "./Question";
 import { storeContext } from "../provider/Provider";
 import { questionnaireActions } from "../../store/questionnaire-reducer";
 
 const { REACT_APP_SITE_URL } = process.env;
-const Questionnaire = ({ id, directionRow }) => {
+const Questionnaire = ({ title, subtitle, id, directionRow }) => {
   const [questions, setQuestions] = useState([]);
   const [isFetching, setFetching] = useState(true);
+  const [cookies] = useCookies(["auth"]);
 
-  const { dispatch } = useContext(storeContext);
+  const { state, dispatch } = useContext(storeContext);
 
   useEffect(() => {
     axios.get(`${REACT_APP_SITE_URL}/api/questionnaires/${id}`).then((res) => {
@@ -28,44 +31,66 @@ const Questionnaire = ({ id, directionRow }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+
+    let data;
+    if (cookies.id) {
+      data = { questionnaire_id: id, user_id: state.auth.user.id };
+    } else {
+      data = { questionnaire_id: id };
+    }
     axios
-      .post(`${REACT_APP_SITE_URL}/api/submissions`, {
-        questionnaire_id: id,
-      })
+      .post(`${REACT_APP_SITE_URL}/api/submissions`, data)
       .then(async (res) => {
         if (res.status === 201) {
           const subId = res.data.id;
           await Promise.all(
             questions.map((answer) =>
-              axios
-                .post(`${REACT_APP_SITE_URL}/api/choices`, {
-                  submission_id: subId,
-                  answer_id: Number(formData.get(`answer-${answer.id}`)),
-                })
-                .then((choice) => {
-                  if (choice.status === 201) {
-                    dispatch({
-                      type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
-                      payload: {
-                        recognized: choice.data.questionnaire_recognized,
-                      },
-                    });
-                  }
-                })
+              axios.post(`${REACT_APP_SITE_URL}/api/choices`, {
+                submission_id: subId,
+                answer_id: Number(formData.get(`answer-${answer.id}`)),
+              })
             )
           );
-          dispatch({
-            type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
-            payload: {
-              openFirstQuestionnaire: false,
-            },
-          });
-          dispatch({
-            type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
-            payload: {
-              openFirstResults: true,
-            },
-          });
+          axios
+            .get(`${REACT_APP_SITE_URL}/api/submissions/${subId}`)
+            .then((submission) => {
+              if (submission.status === 200) {
+                dispatch({
+                  type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+                  payload: {
+                    ranking: submission.data.ranking,
+                    recognized: submission.data.recognized,
+                  },
+                });
+              }
+            });
+          if (id === 1) {
+            dispatch({
+              type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+              payload: {
+                openFirstQuestionnaire: false,
+              },
+            });
+            dispatch({
+              type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+              payload: {
+                openFirstResults: true,
+              },
+            });
+          } else {
+            dispatch({
+              type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+              payload: {
+                openSecondQuestionnaire: false,
+              },
+            });
+            dispatch({
+              type: questionnaireActions.QUESTIONNAIRE_SET_ALL,
+              payload: {
+                openSecondResults: true,
+              },
+            });
+          }
         }
       });
   };
@@ -87,6 +112,13 @@ const Questionnaire = ({ id, directionRow }) => {
           flexDirection: "column",
         }}
       >
+        <Typography component="h2" variant="h4">
+          {title}
+        </Typography>
+
+        <Typography component="p" variant="inherit">
+          {subtitle}
+        </Typography>
         {questions.map((question) => (
           <Question
             key={question.id}
@@ -103,10 +135,14 @@ const Questionnaire = ({ id, directionRow }) => {
 Questionnaire.propTypes = {
   id: PropTypes.number.isRequired,
   directionRow: PropTypes.bool,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
 };
 
 Questionnaire.defaultProps = {
   directionRow: false,
+  title: "",
+  subtitle: "",
 };
 
 export default Questionnaire;
