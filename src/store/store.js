@@ -1,12 +1,17 @@
 import combineReducers from "react-combine-reducers";
 import { authReducer, initialAuthState } from "./auth-reducer";
 import { initialSearchState, searchReducer } from "./search-reducer";
-import {initialLayoutState, layoutReducer} from "./layouts-reducer";
+import { initialLayoutState, layoutReducer } from "./layouts-reducer";
+import {
+  initialQuestionnaireState,
+  questionnaireReducer,
+} from "./questionnaire-reducer";
 
 const [reducer, store] = combineReducers({
   auth: [authReducer, initialAuthState],
   search: [searchReducer, initialSearchState],
   layout: [layoutReducer, initialLayoutState],
+  questionnaire: [questionnaireReducer, initialQuestionnaireState],
 });
 
 export { store, reducer };

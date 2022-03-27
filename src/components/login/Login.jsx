@@ -17,6 +17,7 @@ import Link from "@mui/material/Link";
 import { storeContext } from "../provider/Provider";
 import Copyright from "../../shared/components/Copyright";
 import { authActions } from "../../store/auth-reducer";
+import { layoutActions } from "../../store/layouts-reducer";
 
 const { REACT_APP_SITE_URL } = process.env;
 const Login = () => {
@@ -38,7 +39,6 @@ const Login = () => {
     history.push("/");
   };
 
-  const catchErrors = () => {};
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -52,9 +52,25 @@ const Login = () => {
       .post(`${REACT_APP_SITE_URL}/api/users/login/`, data)
       .then((res) => {
         logUser(res);
+        dispatch({
+          type: layoutActions.LAYOUT_SET_ALL,
+          payload: {
+            openMessage: true,
+            error: false,
+            signalMessage: "Logged in Successfully!",
+          },
+        });
       })
-      .catch((e) => {
-        catchErrors(e?.response?.data.errors);
+      .catch(() => {
+        dispatch({
+          type: layoutActions.LAYOUT_SET_ALL,
+          payload: {
+            openMessage: true,
+            error: true,
+            signalMessage:
+              "Something went wrong! Please check your credentials and try again.",
+          },
+        });
       });
   };
 
@@ -115,11 +131,6 @@ const Login = () => {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="/" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link component={RouterLink} to="/register" variant="body2">
                 Don&apos;t have an account? Sign Up

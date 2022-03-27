@@ -12,6 +12,7 @@ import Register from "components/register/Register";
 import Layout from "components/layout/Layout";
 import generalTheme from "theme";
 import SignalHandler from "components/layout/SignalHandler";
+import FrontPage from "components/pages/FrontPage";
 
 const App = () => (
   <Provider>
@@ -20,6 +21,9 @@ const App = () => (
         <SignalHandler />
         <Router>
           <Switch>
+            <Route path={["/home"]}>
+              <FrontPage />
+            </Route>
             <Route path={["/login"]}>
               <Login />
             </Route>
@@ -29,11 +33,11 @@ const App = () => (
             <Route path={["/register/:email/:code", "/register"]}>
               <Register />
             </Route>
-            <Route path={["", "/"]}>
+            <Route path={["", "/dashboard"]}>
               <Layout />
             </Route>
             <Route>
-              <Redirect to="/" />
+              <Redirect to="/home" />
             </Route>
           </Switch>
         </Router>

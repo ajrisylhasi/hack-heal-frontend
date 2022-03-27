@@ -4,14 +4,23 @@ import { createTheme } from "@material-ui/core/styles";
 const theme = createTheme({
   palette: {
     mode: "light",
+    primary: {
+      main: "#4120A9",
+    },
+    secondary: {
+      main: "#9FA8EB",
+    },
+  },
+  typography: {
+    color: "#1e1e1f",
   },
   breakpoints: {
     values: {
-      xs: 500,
-      sm: 768,
-      md: 992,
-      lg: 1260,
-      xl: 1920,
+      xs: 0,
+      sm: 420,
+      md: 768,
+      lg: 992,
+      xl: 1260,
     },
   },
 });

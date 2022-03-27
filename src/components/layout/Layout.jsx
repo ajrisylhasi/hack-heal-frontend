@@ -42,7 +42,7 @@ const Layout = () => {
       getData();
       history.push("/");
     } else {
-      history.push("/login");
+      history.push("/home");
     }
   }, []);
 
